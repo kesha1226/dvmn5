@@ -9,20 +9,18 @@ import phonenumbers
 
 def validate_phones(apps: StateApps, schema_editor: DatabaseSchemaEditor):
     flat_model = apps.get_model("property", "Flat")
-    for flat in flat_model.objects.all():
-        parsed_phone = phonenumbers.parse(flat.owners_phonenumber, "RU")
+    for flat in flat_model.objects.all().iterator():
+        parsed_phone = phonenumbers.parse(flat.phonenumber, "RU")
         phone = f"+7{parsed_phone.national_number}"
         if not phonenumbers.is_valid_number(parsed_phone):
             phone = ""
-        flat.owner_pure_phone = phone
+        flat.pure_phone = phone
         flat.save()
 
 
 def move_backward(apps, schema_editor):
     flat_model = apps.get_model("property", "Flat")
-    for flat in flat_model.objects.all():
-        flat.owner_pure_phone = ""
-        flat.save()
+    flat_model.objects.all().update(pure_phone="")
 
 
 class Migration(migrations.Migration):

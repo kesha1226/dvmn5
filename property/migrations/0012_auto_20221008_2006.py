@@ -8,12 +8,12 @@ from django.db.migrations.state import StateApps
 def create_owners(apps: StateApps, schema_editor: DatabaseSchemaEditor):
     flat_model = apps.get_model("property", "Flat")
     owner_model = apps.get_model("property", "Owner")
-    for flat in flat_model.objects.all():
+    for flat in flat_model.objects.all().iterator():
         owner_model.objects.get_or_create(
             fio=flat.owner,
-            owners_phonenumber=flat.owners_phonenumber,
+            owners_phonenumber=flat.phonenumber,
             defaults={
-                "owner_pure_phone": flat.owner_pure_phone,
+                "owner_pure_phone": flat.pure_phone,
             },
         )
 

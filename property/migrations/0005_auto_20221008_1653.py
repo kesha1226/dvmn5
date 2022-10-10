@@ -7,11 +7,8 @@ from django.db.migrations.state import StateApps
 
 def init_new_buildings(apps: StateApps, schema_editor: DatabaseSchemaEditor):
     flat_model = apps.get_model("property", "Flat")
-    for flat in flat_model.objects.all():
-        flat.new_building = False
-        if flat.construction_year >= 2015:
-            flat.new_building = True
-        flat.save()
+    flat_model.objects.filter(construction_year__gte=2015).update(new_building=True)
+    flat_model.objects.filter(construction_year__lt=2015).update(new_building=False)
 
 
 class Migration(migrations.Migration):

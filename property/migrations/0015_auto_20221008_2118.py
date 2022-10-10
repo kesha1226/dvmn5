@@ -8,11 +8,11 @@ from django.db.migrations.state import StateApps
 def add_flats(apps: StateApps, schema_editor: DatabaseSchemaEditor):
     flat_model = apps.get_model("property", "Flat")
     owner_model = apps.get_model("property", "Owner")
-    for flat in flat_model.objects.all():
+    for flat in flat_model.objects.all().iterator():
         current_owner = owner_model.objects.get(
             fio=flat.owner,
-            owners_phonenumber=flat.owners_phonenumber,
-            owner_pure_phone=flat.owner_pure_phone,
+            owners_phonenumber=flat.phonenumber,
+            owner_pure_phone=flat.pure_phone,
         )
         flat.owners.add(current_owner)
         flat.save()
