@@ -36,7 +36,7 @@ class OwnerAdmin(admin.ModelAdmin):
     ]
     list_display = (
         "fio",
-        "owners_phonenumber",
-        "owner_pure_phone",
+        "phonenumber",
+        "pure_phone",
     )
     raw_id_fields = ("flats_own",)
